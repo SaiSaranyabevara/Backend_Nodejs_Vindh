@@ -8,7 +8,7 @@ const firmRoutes = require('./routes/firmRoutes'); // Correct path for firmRoute
 const productRoutes= require('./routes/productRoutes');
 const path= require('path');
 
-const port = 8000;
+const port = process.env.port || 8000;
 
 dotEnv.config();
 
@@ -28,6 +28,6 @@ app.listen(port, () => {
     console.log(`Server started and running at port ${port}`);
 });
 
-app.use('/home', (req, res) => {
+app.use('/', (req, res) => {
     res.send("<h2>Welcome to Ruby</h2>"); // Fixed the HTML tag for proper formatting
 });
