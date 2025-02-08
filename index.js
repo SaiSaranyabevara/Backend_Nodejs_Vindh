@@ -6,12 +6,12 @@ const vendorRoutes = require('./routes/vendorRoutes');
 const bodyParser = require('body-parser');
 const firmRoutes = require('./routes/firmRoutes'); // Correct path for firmRoutes
 const productRoutes= require('./routes/productRoutes');
-const path= require('path');
-
+const cors = require('cors')
+ 
 const port = process.env.port || 8000;
 
 dotEnv.config();
-
+app.use(cors())
 mongoose.connect(process.env.mongo_uri)
     .then(() => console.log("MongoDB connected successfully"))
     .catch((error) => console.log("MongoDB connection error:", error));
