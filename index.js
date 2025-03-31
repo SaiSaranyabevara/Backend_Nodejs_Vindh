@@ -28,6 +28,6 @@ app.listen(port, () => {
     console.log(`Server started and running at port ${port}`);
 });
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send("<h2>Welcome to Ruby</h2>"); // Fixed the HTML tag for proper formatting
 });

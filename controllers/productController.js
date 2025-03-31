@@ -79,22 +79,39 @@ const getProductByFirm = async(req,res)=>{
     }
 }
 
-const deleteProductById = async(req,res)=>{
+// const deleteProductById = async(req,res)=>{
+//     try {
+//         const productId= req.params.productId;
+
+//         const deletedProduct = await Product.findOneAndDelete(productId);
+// if(!deletedProduct)
+// {
+//     return res.status(400).json({error:"no porduct found"});
+// }
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({error:"internal server error"})
+
+//     }
+// }
+const deleteProductById = async (req, res) => {
+    const { firmId, productId } = req.params;
+
     try {
-        const productId= req.params.productId;
+        const deletedProduct = await Product.findOneAndDelete({ _id: productId, firmId });
 
-        const deletedProduct = await Product.findOneAndDelete(productId);
-if(!deletedProduct)
-{
-    return res.status(400).json({error:"no porduct found"});
-}
+        if (!deletedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
 
+        res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({error:"internal server error"})
-
+        console.error("Delete Error:", error);
+        res.status(500).json({ message: "Error deleting product", error });
     }
-}
+};
+
 
 
 

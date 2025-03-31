@@ -54,8 +54,8 @@ const vendorLogin = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign({ vendorId: vendor._id }, secretKey, { expiresIn: "7d" });
-
-        res.status(200).json({ success: "Login successful", token });
+        const vendorId=vendor._id;
+        res.status(200).json({ success: "Login successful", token,vendorId });
         console.log(email, "this token", token);
     } catch (error) {
         console.error("Error in vendorLogin:", error);
@@ -72,23 +72,25 @@ const getAllVendors = async (req, res) => {
     }
 };
 
-const getVendorById= async(req,res)=>{
-    const vendorId = req.params.apple;
+const getVendorById = async (req, res) => {
+    const vendorId = req.params.vendorId;  // ✅ Ensure the param matches your route
 
-    try{
-        const vendor =await Vendor.findById(vendorId).populate('firm');
-        if(!vendor)
-        {
-            return res.status(404).json({error:"vendor not found"})
+    try {
+        const vendor = await Vendor.findById(vendorId).populate("firm");
+        if (!vendor) {
+            return res.status(404).json({ error: "Vendor not found" });
         }
-        res.status(200).json({vendor})
-    }
-    catch(error){
-        console.error("Error in getAllVendors:", error.stack); // Improved error log
+
+        const vendorFirmId = vendor.firm.length > 0 ? vendor.firm[0]._id : null;
+        
+        // ✅ Send the full vendor object along with firm details
+        res.status(200).json({ vendor, vendorFirmId });
+    } catch (error) {
+        console.error("Error in getVendorById:", error);
         res.status(500).json({ error: "Internal server error", message: error.message });
-   
     }
-}
+};
+
 
 
 module.exports = { vendorRegister, vendorLogin, getAllVendors,getVendorById };

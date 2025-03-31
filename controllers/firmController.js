@@ -44,6 +44,10 @@ const addFirm = async (req, res) => {
         if (!vendor) {
             return res.status(404).json({ message: "Vendor not found" });
         }
+        
+        if(vendor.firm.length>0){
+            return res.status(400).json({message:"vendor can have only one frame"})
+        }
 
         const firm = new Firm({
             firmName,
@@ -56,10 +60,14 @@ const addFirm = async (req, res) => {
         });
 
         const savedFirm = await firm.save();
+
+        const firmId = savedFirm._id
+
         vendor.firm.push(savedFirm._id);
         await vendor.save();
 
-        res.status(201).json({ message: "Firm added successfully!", firm: savedFirm });
+      
+        res.status(201).json({ message: "Firm added successfully!", firmId});
     } catch (error) {
         console.error("Error adding firm:", error);
         res.status(500).json({ message: "Error adding firm", error: error.message });
